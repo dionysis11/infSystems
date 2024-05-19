@@ -1,6 +1,6 @@
-# TrenWalker
+# Trenkwalder
 
-TrenWalker is a website for managing resumes and job applications. It provides users with the ability to upload, edit, and delete their resumes, as well as apply for job openings.
+Trenkwalder is a website for managing resumes and job applications. It provides users with the ability to upload, edit, and delete their resumes, as well as apply for job openings.
 
 ## Features
 
@@ -17,7 +17,7 @@ TrenWalker is a website for managing resumes and job applications. It provides u
 
 ## Getting Started
 
-To get started with TrenWalker, follow these steps:
+To get started with Trenkwalder, follow these steps:
 
 1. Clone the repository: `git clone <repository-url>`
 2. Open the project in your preferred code editor.
@@ -26,7 +26,7 @@ To get started with TrenWalker, follow these steps:
 
 ## Contributing
 
-Contributions are welcome! If you have any ideas for improving TrenWalker, feel free to open an issue or submit a pull request.
+Contributions are welcome! If you have any ideas for improving Trenkwalder, feel free to open an issue or submit a pull request.
 
 ## License
 
