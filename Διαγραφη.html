@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Διαγραφή Βιογραφικού - Trenkwalder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-arrow:hover {
+            color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .resume-list {
+            margin-top: 20px;
+        }
+        .resume-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .resume-item button {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .resume-item button:hover {
+            background-color: #c82333;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="Επιλογες.html" class="back-arrow">&larr;</a>
+        <h1>Αναρτημένα Βιογραφικά</h1>
+        <div class="resume-list" id="resumeList">
+            <!-- Τα βιογραφικά θα προστεθούν εδώ δυναμικά -->
+        </div>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        // Πλασματικά δεδομένα βιογραφικών
+        var resumes = [
+            { id: 1, name: 'Βιογραφικό 1.pdf' },
+            { id: 2, name: 'Βιογραφικό 2.pdf' },
+            { id: 3, name: 'Βιογραφικό 3.docx' }
+        ];
+
+        function loadResumes() {
+            var resumeList = document.getElementById('resumeList');
+            resumes.forEach(function(resume) {
+                var resumeItem = document.createElement('div');
+                resumeItem.className = 'resume-item';
+                resumeItem.innerHTML = `
+                    <span>${resume.name}</span>
+                    <button onclick="deleteResume(${resume.id})">Διαγραφή</button>
+                `;
+                resumeList.appendChild(resumeItem);
+            });
+        }
+
+        function deleteResume(resumeId) {
+            var resumeIndex = resumes.findIndex(function(resume) {
+                return resume.id === resumeId;
+            });
+
+            if (resumeIndex !== -1) {
+                // Διαγράψτε το βιογραφικό από τον πίνακα
+                var deletedResume = resumes.splice(resumeIndex, 1);
+
+                // Ενημερώστε το UI
+                var resumeList = document.getElementById('resumeList');
+                resumeList.innerHTML = '';
+                loadResumes();
+
+                // Εμφάνιση μηνύματος επιτυχίας
+                var messageDiv = document.getElementById('message');
+                messageDiv.textContent = 'Το βιογραφικό "' + deletedResume[0].name + '" διαγράφηκε επιτυχώς!';
+                messageDiv.className = 'message success';
+            } else {
+                // Εμφάνιση μηνύματος σφάλματος
+                var messageDiv = document.getElementById('message');
+                messageDiv.textContent = 'Σφάλμα: Το βιογραφικό δεν βρέθηκε.';
+                messageDiv.className = 'message error';
+            }
+        }
+
+        // Φόρτωση της λίστας βιογραφικών κατά την εκκίνηση
+        loadResumes();
+    </script>
+</body>
+</html>

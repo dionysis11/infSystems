@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Επεξεργασία Βιογραφικού - Trenkwalder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-arrow:hover {
+            color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-top: 5px;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .resume-list {
+            margin-top: 20px;
+        }
+        .resume-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .resume-item .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .resume-item button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .resume-item button:hover {
+            background-color: #0056b3;
+        }
+        .resume-item .review-button {
+            background-color: #28a745;
+        }
+        .resume-item .review-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="Επιλογες.html" class="back-arrow">&larr;</a>
+        <h1>Αναρτημένα Βιογραφικά</h1>
+        <div class="resume-list" id="resumeList">
+            <!-- Τα βιογραφικά θα προστεθούν εδώ δυναμικά -->
+        </div>
+        <form id="editResumeForm" enctype="multipart/form-data" style="display: none;">
+            <label for="resumeFile">Ανεβάστε το νέο βιογραφικό σας (PDF, DOCX):</label>
+            <input type="file" id="resumeFile" accept=".pdf,.docx" required>
+            <input type="submit" value="Υποβολή Βιογραφικού">
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        // Πλασματικά δεδομένα βιογραφικών
+        var resumes = [
+            { id: 1, name: 'Βιογραφικό 1.pdf', url: 'path/to/blank.pdf' },
+            { id: 2, name: 'Βιογραφικό 2.pdf', url: 'path/to/blank.pdf' },
+            { id: 3, name: 'Βιογραφικό 3.docx', url: 'path/to/blank.pdf' }
+        ];
+
+        function loadResumes() {
+            var resumeList = document.getElementById('resumeList');
+            resumes.forEach(function(resume) {
+                var resumeItem = document.createElement('div');
+                resumeItem.className = 'resume-item';
+                resumeItem.innerHTML = `
+                    <span>${resume.name}</span>
+                    <div class="button-group">
+                        <button class="review-button" onclick="reviewResume('${resume.url}')">Ανασκόπηση</button>
+                        <button onclick="editResume(${resume.id})">Επεξεργασία</button>
+                    </div>
+                `;
+                resumeList.appendChild(resumeItem);
+            });
+        }
+
+        function reviewResume(url) {
+            window.open(url, '_blank');
+        }
+
+        function editResume(resumeId) {
+            var selectedResume = resumes.find(function(resume) {
+                return resume.id === resumeId;
+            });
+            if (selectedResume) {
+                var editForm = document.getElementById('editResumeForm');
+                var messageDiv = document.getElementById('message');
+                messageDiv.textContent = 'Επεξεργασία του: ' + selectedResume.name;
+                messageDiv.className = 'message';
+                editForm.style.display = 'block';
+
+                // Αποθήκευση του τρέχοντος βιογραφικού για ενημέρωση
+                editForm.dataset.currentResumeId = selectedResume.id;
+            }
+        }
+
+        document.getElementById('editResumeForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var fileInput = document.getElementById('resumeFile');
+    var file = fileInput.files[0];
+    var messageDiv = document.getElementById('message');
+
+    if (!file) {
+        messageDiv.textContent = 'Παρακαλώ ανεβάστε ένα αρχείο.';
+        messageDiv.className = 'message error';
+        return;
+    }
+
+    var allowedExtensions = /(\.pdf|\.docx)$/i;
+    if (!allowedExtensions.exec(file.name)) {
+        messageDiv.textContent = 'Μη αποδεκτή μορφή αρχείου. Παρακαλώ ανεβάστε ένα αρχείο PDF ή DOCX.';
+        messageDiv.className = 'message error';
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append('resumeFile', file);
+
+    // Αποστολή του αρχείου στον διακομιστή
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            var currentResume = resumes.find(resume => resume.id === selectedResumeId);
+            if (currentResume) {
+                currentResume.name = file.name;
+                currentResume.url = data.url; // Χρησιμοποιήστε το URL που επιστρέφεται από τον server
+
+                var resumeList = document.getElementById('resumeList');
+                resumeList.innerHTML = '';
+                loadResumes();
+
+                messageDiv.textContent = 'Το βιογραφικό σας υποβλήθηκε επιτυχώς!';
+                messageDiv.className = 'message success';
+            } else {
+                messageDiv.textContent = 'Δεν βρέθηκε το τρέχον βιογραφικό.';
+                messageDiv.className = 'message error';
+            }
+        } else {
+            throw new Error('Failed to upload file.');
+        }
+    })
+    .catch(error => {
+        messageDiv.textContent = 'Σφάλμα κατά την υποβολή του βιογραφικού: ' + error.message;
+        messageDiv.className = 'message error';
+    });
+});
+
+        
+
+        // Φόρτωση της λίστας βιογραφικών κατά την εκκίνηση
+        loadResumes();
+    </script>
+</body>
+</html>
