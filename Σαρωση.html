@@ -4,6 +4,20 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            margin-top: 40px;
         }
         .cv-list {
             list-style-type: none;
@@ -14,6 +28,7 @@
             margin: 10px 0;
             padding: 10px;
             border: 1px solid #ddd;
+            cursor: pointer;
         }
         .cv-list li:hover {
             background-color: #f0f0f0;
@@ -30,16 +45,79 @@
         button:hover {
             background-color: #0056b3;
         }
+        .back-arrow {
+            font-size: 30px;
+            text-decoration: none;
+            color: #007bff;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .back-arrow:hover {
+            color: #0056b3;
+        }
+        .message {
+            margin: 20px 0;
+            padding: 10px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
-    <h1>Επιλογή Βιογραφικού</h1>
-    <ul class="cv-list">
-        <li>Βιογραφικό 1 - Μάκης Δημάκης</li>
-        <li>Βιογραφικό 2 - Ορμπελίνος Πινέδας</li>
-        <li>Βιογραφικό 3 - Κρίτων Λελέκης - Ψωμής</li>
-        <li>Βιογραφικό 4 - Μανώλης Πακιστανίδης</li>
-    </ul>
-    <button onclick="alert('Σάρωση βιογραφικού...')">Σάρωση Βιογραφικού</button>
+    <div class="container">
+        <a href="Επιλογες.html" class="back-arrow">&larr;</a>
+        <h1>Σάρωση Βιογραφικού</h1>
+        <ul class="cv-list">
+            <li onclick="scanCV('Βιογραφικό 1')">Βιογραφικό 1.pdf</li>
+            <li onclick="scanCV('Βιογραφικό 2')">Βιογραφικό 2.pdf</li>
+            <li onclick="scanCV('Βιογραφικό 3')">Βιογραφικό 3.docx</li>
+        </ul>
+        <div id="message" class="message"></div>
+        <button onclick="uploadCV()">Ανάρτηση Βιογραφικού</button>
+        <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
+    </div>
+
+    <script>
+        function scanCV(name) {
+            var messageDiv = document.getElementById('message');
+            messageDiv.textContent = 'Το βιογραφικό "' + name + '" είναι έγκυρο!';
+            messageDiv.className = 'message success';
+            messageDiv.style.display = 'block';
+        }
+
+        function uploadCV() {
+            var fileInput = document.getElementById('fileInput');
+            fileInput.click();
+        }
+
+        function handleFileUpload(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var messageDiv = document.getElementById('message');
+                var validExtensions = ['pdf', 'docx'];
+                var fileExtension = file.name.split('.').pop().toLowerCase();
+
+                if (validExtensions.includes(fileExtension)) {
+                    messageDiv.textContent = 'Το βιογραφικό "' + file.name + '" είναι έγκυρο!';
+                    messageDiv.className = 'message success';
+                } else {
+                    messageDiv.textContent = 'Το αρχείο "' + file.name + '" δεν είναι έγκυρο βιογραφικό!';
+                    messageDiv.className = 'message error';
+                }
+                messageDiv.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
