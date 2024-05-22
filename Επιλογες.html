@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Υποβολή Βιογραφικού - Trenkwalder</title>
+    <title>Μενού Επιλογών - Trenkwalder</title>
     <link rel="icon" type="image/x-icon" href="Logo.png">
     <style>
         body {
@@ -12,11 +12,25 @@
             margin: 0;
             padding: 0;
         }
+        .header {
+            width: 97%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            height: 50px;
+            width: auto;
+        }
         .container {
             max-width: 800px; /* Μεγαλώνει το πλάτος του container */
             margin: 50px auto;
             padding: 20px;
             background-color: #fff;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
@@ -70,6 +84,9 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="TLogo.jpg" alt="Trenkwalder Logo">
+    </div>
     <div class="container">
         <a href="Αρχική_Σελίδα.html" class="back-arrow">&larr;</a>
         <h1>Μενού Επιλογών</h1>
