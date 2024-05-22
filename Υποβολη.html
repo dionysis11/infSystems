@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Υποβολή Βιογραφικού - Trenkwalder</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +34,11 @@
         h1 {
             text-align: center;
             color: #333;
+        }
+        .description {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
         }
         form {
             display: flex;
@@ -75,6 +81,7 @@
     <div class="container">
         <a href="Επιλογες.html" class="back-arrow">&larr;</a>
         <h1>Υποβολή Βιογραφικού</h1>
+        <p class="description">Ανεβάστε το βιογραφικό σας σε μορφή PDF ή DOCX για υποβολή. Βεβαιωθείτε ότι το αρχείο σας είναι στη σωστή μορφή πριν την υποβολή.</p>
         <form id="resumeForm" enctype="multipart/form-data">
             <label for="resumeFile">Ανεβάστε το βιογραφικό σας (PDF, DOCX):</label>
             <input type="file" id="resumeFile" accept=".pdf,.docx" required>

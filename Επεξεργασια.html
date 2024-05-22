@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Επεξεργασία Βιογραφικού - Trenkwalder</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +34,11 @@
         h1 {
             text-align: center;
             color: #333;
+        }
+        .description {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
         }
         form {
             display: flex;
@@ -107,6 +113,7 @@
     <div class="container">
         <a href="Επιλογες.html" class="back-arrow">&larr;</a>
         <h1>Αναρτημένα Βιογραφικά</h1>
+        <p class="description">Εδώ μπορείτε να δείτε και να επεξεργαστείτε τα βιογραφικά που έχετε ανεβάσει. Επιλέξτε ένα βιογραφικό για ανασκόπηση ή επεξεργασία.</p>
         <div class="resume-list" id="resumeList">
             <!-- Τα βιογραφικά θα προστεθούν εδώ δυναμικά -->
         </div>
@@ -163,62 +170,60 @@
         }
 
         document.getElementById('editResumeForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+            event.preventDefault();
 
-    var fileInput = document.getElementById('resumeFile');
-    var file = fileInput.files[0];
-    var messageDiv = document.getElementById('message');
+            var fileInput = document.getElementById('resumeFile');
+            var file = fileInput.files[0];
+            var messageDiv = document.getElementById('message');
 
-    if (!file) {
-        messageDiv.textContent = 'Παρακαλώ ανεβάστε ένα αρχείο.';
-        messageDiv.className = 'message error';
-        return;
-    }
-
-    var allowedExtensions = /(\.pdf|\.docx)$/i;
-    if (!allowedExtensions.exec(file.name)) {
-        messageDiv.textContent = 'Μη αποδεκτή μορφή αρχείου. Παρακαλώ ανεβάστε ένα αρχείο PDF ή DOCX.';
-        messageDiv.className = 'message error';
-        return;
-    }
-
-    var formData = new FormData();
-    formData.append('resumeFile', file);
-
-    // Αποστολή του αρχείου στον διακομιστή
-    fetch('/upload', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            var currentResume = resumes.find(resume => resume.id === selectedResumeId);
-            if (currentResume) {
-                currentResume.name = file.name;
-                currentResume.url = data.url; // Χρησιμοποιήστε το URL που επιστρέφεται από τον server
-
-                var resumeList = document.getElementById('resumeList');
-                resumeList.innerHTML = '';
-                loadResumes();
-
-                messageDiv.textContent = 'Το βιογραφικό σας υποβλήθηκε επιτυχώς!';
-                messageDiv.className = 'message success';
-            } else {
-                messageDiv.textContent = 'Δεν βρέθηκε το τρέχον βιογραφικό.';
+            if (!file) {
+                messageDiv.textContent = 'Παρακαλώ ανεβάστε ένα αρχείο.';
                 messageDiv.className = 'message error';
+                return;
             }
-        } else {
-            throw new Error('Failed to upload file.');
-        }
-    })
-    .catch(error => {
-        messageDiv.textContent = 'Σφάλμα κατά την υποβολή του βιογραφικού: ' + error.message;
-        messageDiv.className = 'message error';
-    });
-});
 
-        
+            var allowedExtensions = /(\.pdf|\.docx)$/i;
+            if (!allowedExtensions.exec(file.name)) {
+                messageDiv.textContent = 'Μη αποδεκτή μορφή αρχείου. Παρακαλώ ανεβάστε ένα αρχείο PDF ή DOCX.';
+                messageDiv.className = 'message error';
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('resumeFile', file);
+
+            // Αποστολή του αρχείου στον διακομιστή
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var currentResume = resumes.find(resume => resume.id === selectedResumeId);
+                    if (currentResume) {
+                        currentResume.name = file.name;
+                        currentResume.url = data.url; // Χρησιμοποιήστε το URL που επιστρέφεται από τον server
+
+                        var resumeList = document.getElementById('resumeList');
+                        resumeList.innerHTML = '';
+                        loadResumes();
+
+                        messageDiv.textContent = 'Το βιογραφικό σας υποβλήθηκε επιτυχώς!';
+                        messageDiv.className = 'message success';
+                    } else {
+                        messageDiv.textContent = 'Δεν βρέθηκε το τρέχον βιογραφικό.';
+                        messageDiv.className = 'message error';
+                    }
+                } else {
+                    throw new Error('Failed to upload file.');
+                }
+            })
+            .catch(error => {
+                messageDiv.textContent = 'Σφάλμα κατά την υποβολή του βιογραφικού: ' + error.message;
+                messageDiv.className = 'message error';
+            });
+        });
 
         // Φόρτωση της λίστας βιογραφικών κατά την εκκίνηση
         loadResumes();
